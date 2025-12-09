@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Nhà Của Khánh – Tầng</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="app-header">
+        <div class="app-header-left">
+          <button class="app-back" id="backBtn">← Cơ sở</button>
+          <div class="app-title" id="title">Tầng</div>
+        </div>
+        <button class="app-logout" id="logoutBtn">Đăng xuất</button>
+      </header>
+
+      <main class="app-main">
+        <section class="panel">
+          <div class="panel-title">Tạo tầng theo số tầng</div>
+          <div class="field">
+            <label>Số tầng muốn tạo</label>
+            <input
+              id="floorCount"
+              class="input"
+              type="number"
+              placeholder="VD: 5"
+              min="1"
+            />
+          </div>
+          <button class="btn btn-primary" id="generateFloorsBtn">
+            Sinh tầng 1 → N
+          </button>
+        </section>
+
+        <section class="panel">
+          <div class="panel-title">Danh sách tầng</div>
+          <div id="floorList" class="list"></div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="tang.js"></script>
+  </body>
+</html>
