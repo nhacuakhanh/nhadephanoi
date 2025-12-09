@@ -1,59 +1,32 @@
-// admin.js (replace)
-import { db, ref, push, set, onValue } from './firebase-config.js';
+// firebase-config.js
+// (save under project root; use module import in pages: <script type="module" src="firebase-config.js"></script>)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
+import {
+  getDatabase,
+  ref,
+  push,
+  set,
+  onValue,
+  get,
+  child,
+  update
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
 
-const inputBase = document.getElementById('baseName');
-const btnAddBase = document.getElementById('btnAddBase');
-const listBases = document.getElementById('basesList');
+const firebaseConfig = {
+  apiKey: "AIzaSyACDGasGgZN6Wn1zTP5_SnuDkgHzwNm5nA",
+  authDomain: "quanlyphongtro-7943c.firebaseapp.com",
+  databaseURL: "https://quanlyphongtro-7943c-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "quanlyphongtro-7943c",
+  storageBucket: "quanlyphongtro-7943c.firebasestorage.app",
+  messagingSenderId: "69438529718",
+  appId: "1:69438529718:web:71598e18a22b932e52c617",
+  measurementId: "G-1NNRS86QPH"
+};
 
-function renderBaseItem(baseId, baseData) {
-  const div = document.createElement('div');
-  div.className = 'base-item';
-  div.innerHTML = `
-    <div><strong>${baseData.name}</strong></div>
-    <div class="base-meta">Tầng: ${baseData.floors ? Object.keys(baseData.floors).length : 0}</div>
-    <div style="margin-top:8px">
-      <button class="btn small" data-id="${baseId}" data-action="open">Quản lý tầng</button>
-      <button class="btn small danger" data-id="${baseId}" data-action="del">Xóa</button>
-    </div>
-  `;
-  // event delegation after append
-  return div;
-}
+const app = initializeApp(firebaseConfig);
+try { getAnalytics(app); } catch(e) { /* analytics optional */ }
+const db = getDatabase(app);
 
-btnAddBase?.addEventListener('click', async () => {
-  const name = inputBase.value?.trim();
-  if (!name) { alert('Nhập tên cơ sở'); return; }
-  try {
-    const newRef = push(ref(db, 'bases'));
-    await set(newRef, { name, createdAt: Date.now() });
-    inputBase.value = '';
-  } catch (e) {
-    console.error(e); alert('Lỗi khi tạo cơ sở');
-  }
-});
-
-// realtime load
-onValue(ref(db, 'bases'), (snapshot) => {
-  listBases.innerHTML = '';
-  const data = snapshot.val() || {};
-  Object.entries(data).forEach(([baseId, baseData]) => {
-    const item = renderBaseItem(baseId, baseData);
-    listBases.appendChild(item);
-  });
-});
-
-// delegate clicks (open/delete)
-listBases.addEventListener('click', (e) => {
-  const btn = e.target.closest('button');
-  if (!btn) return;
-  const action = btn.dataset.action;
-  const baseId = btn.dataset.id;
-  if (action === 'open') {
-    localStorage.setItem('selectedBuilding', baseId);
-    window.location.href = 'tang.html';
-  } else if (action === 'del') {
-    if (!confirm('Xác nhận xóa cơ sở này?')) return;
-    // delete node
-    set(ref(db, `bases/${baseId}`), null).then(()=>{}).catch(console.error);
-  }
-});
+// export functions & db helpers so other modules can import
+export { db, ref, push, set, onValue, get, child, update };
