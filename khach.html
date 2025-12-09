@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1"
+    />
+    <title>Nhà Của Khánh – Thông tin khách</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="app-header">
+        <div class="app-header-left">
+          <button class="app-back" id="backBtn">← Phòng</button>
+          <div class="app-title" id="title">Thông tin khách</div>
+        </div>
+        <button class="app-logout" id="logoutBtn">Đăng xuất</button>
+      </header>
+
+      <main class="app-main">
+        <!-- A. Thông tin khách -->
+        <section class="panel">
+          <div class="panel-title">A. Thông tin khách</div>
+          <div class="field">
+            <label>Họ tên</label>
+            <input id="fullName" class="input" />
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label>Số điện thoại (tài khoản khách)</label>
+              <input id="phone" class="input" />
+            </div>
+            <div class="field">
+              <label>Số người</label>
+              <input id="people" class="input" type="number" min="0" />
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label>Số xe</label>
+              <input id="vehicles" class="input" type="number" min="0" />
+            </div>
+            <div class="field">
+              <label>Tiền thuê (VND / tháng)</label>
+              <input id="rent" class="input" type="number" min="0" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Tiền cọc (VND)</label>
+            <input id="deposit" class="input" type="number" min="0" />
+          </div>
+
+          <div class="panel-title" style="margin-top: 8px">
+            Hợp đồng
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <label>Thời hạn (tháng)</label>
+              <input
+                id="contractMonths"
+                class="input"
+                type="number"
+                min="0"
+              />
+            </div>
+            <div class="field">
+              <label>Ngày bắt đầu (dd/mm/yyyy)</label>
+              <input id="contractStart" class="input" placeholder="08/12/2025" />
+            </div>
+          </div>
+          <div class="field">
+            <label>Ngày kết thúc (tự tính)</label>
+            <input
+              id="contractEnd"
+              class="input"
+              readonly
+              style="background: #f1f5f9"
+            />
+          </div>
+        </section>
+
+        <!-- B. Điện & Dịch vụ -->
+        <section class="panel">
+          <div class="panel-title">B. Điện & Dịch vụ</div>
+
+          <div class="panel-title" style="font-size: 14px; margin-top: 4px">
+            I. Điện phòng
+          </div>
+          <div class="field" style="font-size: 12px; color: #64748b">
+            Điện phòng = (Số mới – Số cũ) × Giá điện phòng
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <label>Công tơ cũ (phòng)</label>
+              <input id="roomOld" class="input" type="number" />
+            </div>
+            <div class="field">
+              <label>Công tơ mới (phòng)</label>
+              <input id="roomNew" class="input" type="number" />
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <label>Giá điện phòng (VND/kWh)</label>
+              <input id="roomPrice" class="input" type="number" />
+            </div>
+            <div class="field">
+              <label>Tiền điện phòng</label>
+              <input
+                id="roomMoney"
+                class="input"
+                readonly
+                style="background: #f1f5f9"
+              />
+            </div>
+          </div>
+
+          <div
+            class="panel-title"
+            style="font-size: 14px; margin-top: 10px"
+          >
+            II. Điện chung
+          </div>
+          <div class="field" style="font-size: 12px; color: #64748b">
+            Điện chung 1 người = (ĐH Tổng – Tổng điện phòng cơ sở) ×
+            Giá điện chung / Tổng số người. <br />
+            Điện chung phòng = Điện chung 1 người × số người trong phòng.
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <label>ĐH tổng cũ</label>
+              <input id="mainOld" class="input" type="number" />
+            </div>
+            <div class="field">
+              <label>ĐH tổng mới</label>
+              <input id="mainNew" class="input" type="number" />
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <label>Giá điện chung (VND/kWh)</label>
+              <input id="sharedPrice" class="input" type="number" />
+            </div>
+            <div class="field">
+              <label>Tiền điện chung phòng</label>
+              <input
+                id="sharedMoney"
+                class="input"
+                readonly
+                style="background: #f1f5f9"
+              />
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label>Tổng điện phòng cơ sở (kWh)</label>
+              <input
+                id="totalRoomKwh"
+                class="input"
+                readonly
+                style="background: #f1f5f9"
+              />
+            </div>
+            <div class="field">
+              <label>Tổng người trong cơ sở</label>
+              <input
+                id="totalPeople"
+                class="input"
+                readonly
+                style="background: #f1f5f9"
+              />
+            </div>
+          </div>
+
+          <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 10px 0" />
+
+          <div class="panel-title" style="font-size: 14px">
+            III. Dịch vụ chung
+          </div>
+          <div class="field" style="font-size: 12px; color: #64748b">
+            Dịch vụ = (nước + rác + lọc + giặt + sấy + vệ sinh) × số người +
+            wifi
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label>Nước (VND/người)</label>
+              <input id="svcWater" class="input" type="number" />
+            </div>
+            <div class="field">
+              <label>Rác (VND/người)</label>
+              <input id="svcTrash" class="input" type="number" />
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label>Máy lọc nước (VND/người)</label>
+              <input id="svcFilter" class="input" type="number" />
+            </div>
+            <div class="field">
+              <label>Giặt (VND/lượt)</label>
+              <input id="svcLaundry" class="input" type="number" />
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label>Sấy (VND/lượt)</label>
+              <input id="svcDryer" class="input" type="number" />
+            </div>
+            <div class="field">
+              <label>Vệ sinh (VND/phòng)</label>
+              <input id="svcClean" class="input" type="number" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Wifi (VND/phòng)</label>
+            <input id="svcWifi" class="input" type="number" />
+          </div>
+
+          <div class="field">
+            <label>Tổng dịch vụ</label>
+            <input
+              id="svcTotal"
+              class="input"
+              readonly
+              style="background: #f1f5f9"
+            />
+          </div>
+        </section>
+
+        <!-- C. Tổng tiền -->
+        <section class="panel">
+          <div class="panel-title">C. Tổng tiền</div>
+          <div class="field" style="font-size: 12px; color: #64748b">
+            Tổng = Tiền thuê + Điện phòng + Điện chung + Dịch vụ.
+          </div>
+
+          <div class="total-box">
+            <div class="total-line">
+              <span>Tiền thuê</span>
+              <span id="rentDisplay">0 đ</span>
+            </div>
+            <div class="total-line">
+              <span>Điện phòng</span>
+              <span id="roomDisplay">0 đ</span>
+            </div>
+            <div class="total-line">
+              <span>Điện chung</span>
+              <span id="sharedDisplay">0 đ</span>
+            </div>
+            <div class="total-line">
+              <span>Dịch vụ</span>
+              <span id="svcDisplay">0 đ</span>
+            </div>
+            <hr style="border: none; border-top: 1px dashed #cbd5f5" />
+            <div class="total-line" style="font-weight: 650; font-size: 15px">
+              <span>TỔNG PHẢI ĐÓNG</span>
+              <span id="totalDisplay">0 đ</span>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 8px; margin-top: 10px">
+            <button class="btn btn-outline" id="calcBtn">Tính tiền</button>
+            <button class="btn btn-primary" id="saveBtn">Lưu khách</button>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="khach.js"></script>
+  </body>
+              </html>
