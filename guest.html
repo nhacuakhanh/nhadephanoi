@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1"
+    />
+    <title>Nhà Của Khánh – Khách thuê</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="app-header">
+        <div class="app-header-left">
+          <span class="app-title" id="title">Khách thuê</span>
+        </div>
+        <button class="app-logout" id="logoutBtn">Đăng xuất</button>
+      </header>
+
+      <main class="app-main">
+        <section class="panel">
+          <div class="panel-title">Phòng của bạn</div>
+          <div style="font-size: 13px; color: #64748b; margin-bottom: 6px">
+            Thông tin hợp đồng & dịch vụ do chủ nhà quản lý. Bạn chỉ nhập lại
+            <b>công tơ phòng</b> để tính tiền.
+          </div>
+          <div class="field">
+            <label>Họ tên</label>
+            <input id="gFullName" class="input" readonly />
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <label>Phòng</label>
+              <input id="gRoom" class="input" readonly />
+            </div>
+            <div class="field">
+              <label>Cơ sở / Tầng</label>
+              <input id="gBaseFloor" class="input" readonly />
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <label>Tiền thuê</label>
+              <input id="gRent" class="input" readonly />
+            </div>
+            <div class="field">
+              <label>Số người</label>
+              <input id="gPeople" class="input" readonly />
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-title">Công tơ phòng</div>
+          <div class="field" style="font-size: 12px; color: #64748b">
+            Bạn chỉ được chỉnh <b>Số cũ</b> và <b>Số mới</b> của công tơ
+            <b>trong phòng</b>.
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <label>Công tơ cũ</label>
+              <input id="roomOld" class="input" type="number" />
+            </div>
+            <div class="field">
+              <label>Công tơ mới</label>
+              <input id="roomNew" class="input" type="number" />
+            </div>
+          </div>
+
+          <button class="btn btn-primary" id="calcBtn" style="margin-top: 8px">
+            Tính tiền
+          </button>
+
+          <div id="resultBox" class="result-box" style="display: none"></div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="guest.js"></script>
+  </body>
+</html>
