@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Nhà Của Khánh – Cơ sở</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="app-header">
+        <div class="app-header-left">
+          <span class="app-title">Cơ sở</span>
+          <span class="badge-role">Chủ nhà</span>
+        </div>
+        <button class="app-logout" id="logoutBtn">Đăng xuất</button>
+      </header>
+
+      <main class="app-main">
+        <section class="panel">
+          <div class="panel-title">Tạo cơ sở mới</div>
+          <div class="field">
+            <label>Tên cơ sở</label>
+            <input
+              id="buildingName"
+              class="input"
+              placeholder="Ví dụ: Nhà số 1 – Hà Nội"
+            />
+          </div>
+          <button class="btn btn-primary" id="addBuildingBtn">
+            Thêm cơ sở
+          </button>
+        </section>
+
+        <section class="panel">
+          <div class="panel-title">Danh sách cơ sở</div>
+          <div id="buildingList" class="list"></div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="admin.js"></script>
+  </body>
+</html>
