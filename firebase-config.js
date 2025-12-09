@@ -1,80 +1,59 @@
-// firebase-config.js (SDK v9 module, chạy trên browser)
+// admin.js (replace)
+import { db, ref, push, set, onValue } from './firebase-config.js';
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-import {
-  getDatabase,
-  ref,
-  get,
-  set,
-  update,
-  remove,
-  onValue,
-  child,
-  push
-} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
-import {
-  getAuth,
-  signInAnonymously
-} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+const inputBase = document.getElementById('baseName');
+const btnAddBase = document.getElementById('btnAddBase');
+const listBases = document.getElementById('basesList');
 
-// CẤU HÌNH CỦA MÀY
-const firebaseConfig = {
-  apiKey: "AIzaSyACDGasGgZN6Wn1zTP5_SnuDkgHzwNm5nA",
-  authDomain: "quanlyphongtro-7943c.firebaseapp.com",
-  databaseURL:
-    "https://quanlyphongtro-7943c-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "quanlyphongtro-7943c",
-  storageBucket: "quanlyphongtro-7943c.firebasestorage.app",
-  messagingSenderId: "69438529718",
-  appId: "1:69438529718:web:71598e18a22b932e52c617",
-  measurementId: "G-1NNRS86QPH"
-};
+function renderBaseItem(baseId, baseData) {
+  const div = document.createElement('div');
+  div.className = 'base-item';
+  div.innerHTML = `
+    <div><strong>${baseData.name}</strong></div>
+    <div class="base-meta">Tầng: ${baseData.floors ? Object.keys(baseData.floors).length : 0}</div>
+    <div style="margin-top:8px">
+      <button class="btn small" data-id="${baseId}" data-action="open">Quản lý tầng</button>
+      <button class="btn small danger" data-id="${baseId}" data-action="del">Xóa</button>
+    </div>
+  `;
+  // event delegation after append
+  return div;
+}
 
-// INIT
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const auth = getAuth(app);
-
-// Đăng nhập ẩn danh để được phép ghi/đọc DB
-signInAnonymously(auth).catch((err) => {
-  console.error("Lỗi đăng nhập ẩn danh Firebase:", err);
+btnAddBase?.addEventListener('click', async () => {
+  const name = inputBase.value?.trim();
+  if (!name) { alert('Nhập tên cơ sở'); return; }
+  try {
+    const newRef = push(ref(db, 'bases'));
+    await set(newRef, { name, createdAt: Date.now() });
+    inputBase.value = '';
+  } catch (e) {
+    console.error(e); alert('Lỗi khi tạo cơ sở');
+  }
 });
 
-// Helper tiền Việt Nam
-function vnd(n) {
-  return (Number(n) || 0).toLocaleString("vi-VN") + " đ";
-}
+// realtime load
+onValue(ref(db, 'bases'), (snapshot) => {
+  listBases.innerHTML = '';
+  const data = snapshot.val() || {};
+  Object.entries(data).forEach(([baseId, baseData]) => {
+    const item = renderBaseItem(baseId, baseData);
+    listBases.appendChild(item);
+  });
+});
 
-// Helper session (lưu role, baseId, floorId, roomId, phone)
-const SESSION_KEY = "nhatro_session";
-
-function getSession() {
-  const raw = localStorage.getItem(SESSION_KEY);
-  return raw ? JSON.parse(raw) : {};
-}
-
-function saveSession(partial) {
-  const current = getSession();
-  const next = { ...current, ...partial };
-  localStorage.setItem(SESSION_KEY, JSON.stringify(next));
-}
-
-function clearSession() {
-  localStorage.removeItem(SESSION_KEY);
-}
-
-export {
-  db,
-  ref,
-  get,
-  set,
-  update,
-  remove,
-  onValue,
-  child,
-  push,
-  vnd,
-  getSession,
-  saveSession,
-  clearSession
-};
+// delegate clicks (open/delete)
+listBases.addEventListener('click', (e) => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  const action = btn.dataset.action;
+  const baseId = btn.dataset.id;
+  if (action === 'open') {
+    localStorage.setItem('selectedBuilding', baseId);
+    window.location.href = 'tang.html';
+  } else if (action === 'del') {
+    if (!confirm('Xác nhận xóa cơ sở này?')) return;
+    // delete node
+    set(ref(db, `bases/${baseId}`), null).then(()=>{}).catch(console.error);
+  }
+});
