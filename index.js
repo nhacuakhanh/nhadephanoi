@@ -1,57 +1,61 @@
-// index.js – Đăng nhập admin / khách
+// index.js  (replace)
+import { db, ref, get, child } from './firebase-config.js';
 
-import {
-  db,
-  ref,
-  get,
-  child,
-  saveSession,
-  clearSession
-} from "./firebase-config.js";
+// Admin credentials (kept in code; not printed in UI)
+const ADMIN_USER = 'khanhchunha';
+const ADMIN_PASS = 'khanh0311';
 
-const ADMIN_USER = "khanhchunha";
-const ADMIN_PASS = "khanh0311";
-
-document.getElementById("loginBtn").addEventListener("click", login);
+const elUser = document.getElementById('username');
+const elPass = document.getElementById('password');
+const btnLogin = document.getElementById('btnLogin');
 
 async function login() {
-  const uEl = document.getElementById("username");
-  const pEl = document.getElementById("password");
-  const username = uEl.value.trim();
-  const password = pEl.value.trim();
+  const username = elUser?.value?.trim();
+  const password = elPass?.value?.trim();
+  if (!username || !password) { alert('Nhập đầy đủ tài khoản và mật khẩu'); return; }
 
-  if (!username || !password) {
-    alert("Vui lòng nhập đủ tài khoản và mật khẩu.");
-    return;
-  }
-
-  // 1) Admin
+  // Admin login
   if (username === ADMIN_USER && password === ADMIN_PASS) {
-    clearSession();
-    saveSession({ role: "admin" });
-    window.location.href = "admin.html";
+    // set session
+    localStorage.setItem('role', 'admin');
+    // redirect
+    window.location.href = 'admin.html';
     return;
   }
 
-  // 2) Khách – dùng SĐT
+  // Guest login -> look up in guestsIndex
   try {
-    const idxSnap = await get(child(ref(db), "guestIndex/" + username));
-    if (!idxSnap.exists() || password !== username) {
-      alert("Sai tài khoản hoặc mật khẩu.\nKhách dùng SĐT làm tài khoản + mật khẩu.");
+    const dbRef = ref(db);
+    const snap = await get(child(dbRef, `guestsIndex/${username}`));
+    if (!snap.exists()) {
+      alert('Tài khoản khách không tồn tại hoặc chưa được tạo bởi Admin.');
       return;
     }
-    const info = idxSnap.val();
-    clearSession();
-    saveSession({
-      role: "guest",
-      phone: username,
-      baseId: info.baseId,
-      floorId: info.floorId,
-      roomId: info.roomId
-    });
-    window.location.href = "guest.html"; // Trang dành cho khách
+    const guest = snap.val();
+    if (guest.password !== password) {
+      alert('Sai mật khẩu.');
+      return;
+    }
+
+    // Save session: role + location
+    localStorage.setItem('role', 'guest');
+    localStorage.setItem('selectedBuilding', guest.baseId || '');
+    localStorage.setItem('selectedFloor', guest.floorId || '');
+    localStorage.setItem('selectedRoom', guest.roomId || '');
+    localStorage.setItem('selectedGuestPhone', username);
+
+    // go to khach page
+    window.location.href = 'guest.html';
+    return;
   } catch (err) {
     console.error(err);
-    alert("Có lỗi khi đăng nhập. Vui lòng thử lại.");
+    alert('Lỗi khi kiểm tra tài khoản. Kiểm tra kết nối Firebase.');
   }
 }
+
+btnLogin?.addEventListener('click', login);
+
+// allow Enter key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') login();
+});
